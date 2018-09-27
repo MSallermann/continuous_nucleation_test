@@ -30,22 +30,31 @@ Q = 0
 lam = 10
 
 #edge length of the cube in Angstroem
-edge_length = 10
+edge_length = 30
 
 #edge length of cube in number of atoms
-size = 10
+size = 30
 
 #number of iterations
-n_it = 10000
+n_it = 20000
 
-J = calcJ(size, lam) * 10
+J = calcJ(size, lam)
 
 lattice_constant = edge_length / size
 mu_s = 1*(lattice_constant)**3
 
-fields = np.arange(1, 3, step = 0.2)
+# fields = np.arange(1.5, 2.5, step = 0.3)
+# outfile = 'output_{0}.txt'.format(size)
 
-with open('output_{0}.txt'.format(size), 'a') as out:
+fields = [1.5, 1.5, 1.5, 1.5, 1.5]
+outfile = 'output_test_determinism.txt'.format(size)
+image_folder = './images_test_determinism/'
+
+import os
+if not os.path.exists(os.path.dirname(image_folder)):
+    os.makedirs(os.path.dirname(image_folder))
+
+with open(outfile, 'a') as out:
     out.write("#" + str(datetime.datetime.now()) + "\n")
     out.write("#Q = {0}\n".format(Q))
     out.write("#J = {0}\n".format(J))
@@ -53,12 +62,12 @@ with open('output_{0}.txt'.format(size), 'a') as out:
     out.write("#lambda = {0}\n".format(lam))
     out.write("#n_it = {0}\n".format(n_it))
     out.write("#lattice_constant = {0}\n".format(lattice_constant))
-    out.write("mu_s = {0}\n".format(mu_s))
-    out.write("#size, ext field, reduced_field, vorticity\n")
+    out.write("#mu_s = {0}\n".format(mu_s))
+    out.write("#size, ext field [T], reduced_field, Energy[meV], vorticity\n")
 
     with state.State("") as p_state:
         parameters.llg.set_output_general(p_state, any=False)
-        parameters.llg.set_convergence(p_state, 0)
+        parameters.llg.set_convergence(p_state, 1E-8)
         parameters.llg.set_direct_minimization(p_state, True)
         # print("before set mu_s")
         # geometry.set_mu_s(p_state, mu_s)
@@ -86,8 +95,9 @@ with open('output_{0}.txt'.format(size), 'a') as out:
 
             spins = np.array(system.get_spin_directions(p_state)).reshape(nos, 3)
             reduced_field = calcReducedField(field)
-
+            Energy = system.get_energy(p_state)
             vorticity = np.abs(getVorticity(spins, size))
-            out.write("{0}, {1}, {2}, {3}\n".format(size, field, reduced_field, vorticity))
+            io.image_write(p_state, image_folder + "/size_{}_field_{}_{}.ovf".format(size, field, datetime.datetime.now()))
+            out.write("{0}, {1}, {2}, {3}, {4}\n".format(size, field, reduced_field, Energy, vorticity))
 
 
