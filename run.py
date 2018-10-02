@@ -1,7 +1,7 @@
 path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
 import sys
 sys.path.append(path_to_spirit_pkg)
-
+import time
 import datetime
 import numpy as np
 from spirit import state, simulation, constants, parameters, parameters, geometry, system, hamiltonian, configuration, io
@@ -20,35 +20,29 @@ def calcReducedField(field):
     return field / (mu_0 * mu_B * 1E30)
 
 def calcJ(size, lam):
-    return (size * 1E-10)**2 / lam**2 * (mu_0 * (mu_B * 1E30)**2)/2 * 1E-10
-
+    return (size/10.0)**2 * mu_B**2 * mu_0 * 1E30
 
 mu_B = 0.057883817555
 mu_0 = 2.0133545E-28
 
+#parameters of experiment
 Q = 0
 lam = 10
 
-#edge length of the cube in Angstroem
 edge_length = 20
-
-#edge length of cube in number of atoms
 size = edge_length
-
-#number of iterations
-n_it = 200000000
-
 J = calcJ(size, lam)
+convergence = 1E-20
+delta_t = 0.001
+n_iterations = 20000
 
 lattice_constant = edge_length / size
 mu_s = 1*(lattice_constant)**3
 
-# fields = np.arange(1.5, 2.5, step = 0.3)
-# outfile = 'output_{0}.txt'.format(size)
+fields = np.arange(1, 2.5, step = 0.3)
 
-fields = [1 for i in range(10)]
-outfile = 'output_test_determinism.txt'.format(size)
-image = './images_test_determinism/image.ovf'
+outfile = 'output_{0}.txt'.format(size)
+image = './images/image_{}.ovf'.format(size)
 
 import os
 if not os.path.exists(os.path.dirname(image)):
@@ -56,20 +50,21 @@ if not os.path.exists(os.path.dirname(image)):
 
 with open(outfile, 'a') as out:
     out.write("#" + str(datetime.datetime.now()) + "\n")
-    out.write("#Q = {0}\n".format(Q))
-    out.write("#J = {0}\n".format(J))
-    out.write("#edge_length = {0}\n".format(edge_length))
-    out.write("#lambda = {0}\n".format(lam))
-    out.write("#n_it = {0}\n".format(n_it))
-    out.write("#lattice_constant = {0}\n".format(lattice_constant))
-    out.write("#mu_s = {0}\n".format(mu_s))
-    out.write("#size, ext field [T], reduced_field, Energy[meV], vorticity\n")
+    out.write("#Q                = {}\n".format(Q))
+    out.write("#J                = {}\n".format(J))
+    out.write("#edge_length      = {}\n".format(edge_length))
+    out.write("#lambda           = {}\n".format(lam))
+    out.write("#n_iterations     = {}\n".format(n_iterations))
+    out.write("#lattice_constant = {}\n".format(lattice_constant))
+    out.write("#mu_s             = {}\n".format(mu_s))
+    out.write("#size             = {}\n".format(size))    
+    out.write("#field [T], reduced_field, Energy[meV], vorticity\n")
 
     with state.State("") as p_state:
         parameters.llg.set_output_general(p_state, any=False)
-        parameters.llg.set_convergence(p_state, 1E-9)
-        parameters.llg.set_direct_minimization(p_state, True)
-        parameters.llg.set_timestep(p_state, 1E-4)
+        parameters.llg.set_convergence(p_state, convergence)
+        parameters.llg.set_direct_minimization(p_state, False)
+        parameters.llg.set_timestep(p_state, delta_t)
 
         geometry.set_lattice_constant(p_state, lattice_constant)
         geometry.set_n_cells(p_state, [size, size, size])
@@ -78,28 +73,24 @@ with open(outfile, 'a') as out:
         pos = np.array(geometry.get_positions(p_state)).reshape(nos, 3)
 
         hamiltonian.set_ddi(p_state, 1)
-        hamiltonian.set_exchange(p_state, 1, [10])
-        hamiltonian.set_dmi(p_state, 1, [6])
+        hamiltonian.set_exchange(p_state, 1, [J])
+        hamiltonian.set_dmi(p_state, 0, [])
         hamiltonian.set_anisotropy(p_state, 0, [0,0,1])
         
-
         io.image_write(p_state, image)
         
         for i, field in enumerate(fields):
             hamiltonian.set_field(p_state, field, [0,0,1])
             configuration.plus_z(p_state)
-            configuration.skyrmion(p_state, 5)
             
+            simulation.start(p_state, simulation.METHOD_LLG, simulation.SOLVER_VP, n_iterations = n_iterations)
             io.image_append(p_state, image)
-            for i in range(10):
-                simulation.start(p_state, simulation.METHOD_LLG, simulation.SOLVER_VP, n_iterations = 1000)
-                io.image_append(p_state, image)
 
             spins = np.array(system.get_spin_directions(p_state)).reshape(nos, 3)
             reduced_field = calcReducedField(field)
             Energy = system.get_energy(p_state)
             vorticity = np.abs(getVorticity(spins, size))
                 
-            out.write("{0}, {1}, {2}, {3}, {4}\n".format(size, field, reduced_field, Energy, vorticity))
+            out.write("{}, {}, {}, {}\n".format(field, reduced_field, Energy, vorticity))
 
 
