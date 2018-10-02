@@ -66,7 +66,6 @@ with open(outfile, 'a') as out:
             io.image_append(p_state, image)
 
             spins = np.array(system.get_spin_directions(p_state)).reshape(nos, 3)
-            reduced_field = calcReducedField(field)
             Energy = system.get_energy(p_state)
             vorticity = np.abs(getVorticity(spins, size))
                 
