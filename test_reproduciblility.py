@@ -46,7 +46,6 @@ with open(outfile, 'a') as out:
         parameters.llg.set_direct_minimization(p_state, False)
         parameters.llg.set_timestep(p_state, delta_t)
 
-        geometry.set_lattice_constant(p_state, lattice_constant)
         geometry.set_n_cells(p_state, [size, size, size])
 
         nos = system.get_nos(p_state)
