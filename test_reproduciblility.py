@@ -18,13 +18,12 @@ def getVorticity(spins, size):
 
 
 n_trials = 20
-n_it = 200000000
 size = 20
 field = 1.0
 J = 2.0
 convergence = 0
 delta_t = 0.0001
-n_iterations = 100000
+n_iterations = 10000
 
 fields = [field for i in range(n_trials)]
 
