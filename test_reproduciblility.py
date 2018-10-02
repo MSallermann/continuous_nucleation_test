@@ -1,4 +1,4 @@
-path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
+path_to_spirit_pkg = "/Users/sallermann/Coding/spirit/core/python"
 import sys
 sys.path.append(path_to_spirit_pkg)
 
@@ -18,13 +18,12 @@ def getVorticity(spins, size):
 
 
 n_trials = 20
-n_it = 200000000
 size = 20
 field = 1.0
 J = 2.0
 convergence = 0
 delta_t = 0.0001
-n_iterations = 100000
+n_iterations = 10000
 
 fields = [field for i in range(n_trials)]
 
@@ -66,7 +65,6 @@ with open(outfile, 'a') as out:
             io.image_append(p_state, image)
 
             spins = np.array(system.get_spin_directions(p_state)).reshape(nos, 3)
-            reduced_field = calcReducedField(field)
             Energy = system.get_energy(p_state)
             vorticity = np.abs(getVorticity(spins, size))
                 
