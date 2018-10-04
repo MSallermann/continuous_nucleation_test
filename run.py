@@ -20,7 +20,7 @@ def calcReducedField(field):
     return field / (mu_0 * mu_B * 1E30)
 
 def calcJ(size, lam):
-    return (size/10.0)**2 * mu_B**2 * mu_0 * 1E30
+    return (size/10.0)**2 * mu_B**2/2 * mu_0 * 1E30
 
 mu_B = 0.057883817555
 mu_0 = 2.0133545E-28
@@ -34,12 +34,12 @@ size = edge_length
 J = calcJ(size, lam)
 convergence = 1E-20
 delta_t = 0.001
-n_iterations = 20000
+n_iterations = 100000
 
 lattice_constant = edge_length / size
 mu_s = 1*(lattice_constant)**3
 
-fields = np.arange(1, 2.5, step = 0.3)
+fields = np.arange(1.8, 2, step = 0.01)
 
 outfile = 'output_{0}.txt'.format(size)
 image = './images/image_{}.ovf'.format(size)
