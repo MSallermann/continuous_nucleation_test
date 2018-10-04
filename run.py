@@ -39,6 +39,8 @@ K = calcK(Q)
 convergence = 1E-20
 delta_t = 0.001
 n_iterations = 100000
+n_iterations = 1000
+
 
 
 lattice_constant = edge_length / size
