@@ -23,16 +23,16 @@ def calcJ(size, lam):
     return (size/10.0)**2 * mu_B**2/2 * mu_0 * 1E30
 
 def calcK(Q):
-    return mu_B**2 * mu_0 / 2 * 1E30 * 0.001
+    return Q * mu_B**2 * mu_0 / 2 * 1E30 * 0.001
 
 mu_B = 0.057883817555
 mu_0 = 2.0133545E-28
 
 #parameters of experiment
-Q = 0
+Q = 0.001
 lam = 10
 
-edge_length = 20
+edge_length = 30
 size = edge_length
 J = calcJ(size, lam)
 K = calcK(Q)
