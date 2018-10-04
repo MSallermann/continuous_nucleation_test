@@ -1,4 +1,6 @@
-path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
+# path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
+path_to_spirit_pkg = "/Users/sallermann/Coding/spirit/core/python"
+
 import sys
 sys.path.append(path_to_spirit_pkg)
 import time
