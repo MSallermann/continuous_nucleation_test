@@ -1,5 +1,5 @@
-# path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
-path_to_spirit_pkg = "/Users/sallermann/Coding/spirit/core/python"
+path_to_spirit_pkg = "/home/moritz/Coding/spirit/core/python"
+# path_to_spirit_pkg = "/Users/sallermann/Coding/spirit/core/python"
 
 import sys
 sys.path.append(path_to_spirit_pkg)
@@ -27,25 +27,25 @@ def calcJ(size, lam):
 def calcK(Q):
     return Q * mu_B**2 * mu_0 / 2 * 1E30 * 0.001
 
-mu_B = 0.057883817555
-mu_0 = 2.0133545E-28
+mu_B = constants.mu_B
+mu_0 = constants.mu_0
 
 #parameters of experiment
 Q = 0.001
 lam = 10
 
-edge_length = 10
+edge_length = 20
 size = edge_length
 J = calcJ(size, lam) * 2
 K = 0.000337
 convergence = 1E-8
-delta_t = 0.001
+delta_t = 0.0001
 n_iterations = 100000
 
 lattice_constant = edge_length / size
 mu_s = 1*(lattice_constant)**3
 
-fields = np.arange(1.2, 2.4, step = 0.005)
+fields = np.arange(1.80, 2.0, step = 0.02)
 
 outfile = 'output_{0}.txt'.format(size)
 image = './images/image_{}.ovf'.format(size)
@@ -61,7 +61,6 @@ with open(outfile, 'a') as out:
     out.write("# K                = {}\n".format(K))
     out.write("# edge_length      = {}\n".format(edge_length))
     out.write("# lambda           = {}\n".format(lam))
-    out.write("# n_iterations     = {}\n".format(n_iterations))
     out.write("# lattice_constant = {}\n".format(lattice_constant))
     out.write("# mu_s             = {}\n".format(mu_s))
     out.write("# size             = {}\n".format(size))    
@@ -85,10 +84,10 @@ with open(outfile, 'a') as out:
         hamiltonian.set_anisotropy(p_state, K, [0,0,1])
         
         io.image_write(p_state, image)
-        
+        io.image_read(p_state, "./initial_image_{}.ovf".format(size))
+
         for i, field in enumerate(fields):
             hamiltonian.set_field(p_state, field, [0,0,1])
-            # configuration.plus_z(p_state)
             
             simulation.start(p_state, simulation.METHOD_LLG, simulation.SOLVER_VP, n_iterations = n_iterations)
             io.image_append(p_state, image)
@@ -98,6 +97,6 @@ with open(outfile, 'a') as out:
             Energy = system.get_energy(p_state)
             vorticity = np.abs(getVorticity(spins, size))
                 
-            out.write("{:^20.10f} {:^20.10f} {:^20.10f} {:^20.10f}\n".format(field, reduced_field, Energy, vorticity))
+            out.write("{:^20.10f} {:^20.10f} {:^20.10f} {:^20.10f} {:^20.10f}\n".format(field, reduced_field, Energy, vorticity, vorticity**2))
 
 
