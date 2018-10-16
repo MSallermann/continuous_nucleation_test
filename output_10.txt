@@ -7,7 +7,7 @@
 # lattice_constant = 1
 # mu_s             = 1
 # size             = 10
-# field [T], reduced_field, Energy[meV], vorticity
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
     1.8000000000         0.1544525500       -1936.7277832031       0.2321443205         0.0538909855    
     1.8200000000         0.1561686895       -1937.8260498047       0.2115806260         0.0447663613    
     1.8400000000         0.1578848289       -1938.9288330078       0.1889227916         0.0356918212    
