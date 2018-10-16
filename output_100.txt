@@ -25,3 +25,53 @@
     1.9000000000         0.1630332472     -200471840.0000000000     0.0602189846         0.0036263261    
     1.9500000000         0.1673235958     -200474752.0000000000     0.0374403536         0.0014017801    
     2.0000000000         0.1716139445     -200477552.0000000000     0.0266574503         0.0007106197    
+# 2018-10-16 10:03:28.741410
+# Q                = 0.001
+# J                = 67.4581752494
+# K                = 0.000337
+# edge_length      = 100
+# lambda           = 10
+# lattice_constant = 1
+# mu_s             = 1
+# size             = 100
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
+# 2018-10-16 10:03:44.385595
+# Q                = 0.001
+# J                = 67.4581752494
+# K                = 0.000337
+# edge_length      = 100
+# lambda           = 10
+# lattice_constant = 1
+# mu_s             = 1
+# size             = 100
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
+# 2018-10-16 10:04:01.043215
+# Q                = 0.001
+# J                = 67.4581752494
+# K                = 0.000337
+# edge_length      = 100
+# lambda           = 10
+# lattice_constant = 1
+# mu_s             = 1
+# size             = 100
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
+# 2018-10-16 10:04:32.425685
+# Q                = 0.001
+# J                = 67.4581752494
+# K                = 0.000337
+# edge_length      = 100
+# lambda           = 10
+# lattice_constant = 1
+# mu_s             = 1
+# size             = 100
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
+# 2018-10-16 10:05:23.855582
+# Q                = 0.001
+# J                = 67.4581752494
+# K                = 0.000337
+# edge_length      = 100
+# lambda           = 10
+# lattice_constant = 1
+# mu_s             = 1
+# size             = 100
+# field [T], reduced_field, Energy[meV], vorticity, vorticity^2
